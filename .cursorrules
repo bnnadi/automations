@@ -1,0 +1,134 @@
+# Cursor Rules - Personal AI Automations
+
+## Project Intelligence
+
+This file captures patterns, preferences, and project-specific insights that help maintain consistency across sessions.
+
+### Project Structure
+- **Monorepo Pattern**: Each automation lives in its own subdirectory (e.g., `jobs/`)
+- **Self-Contained**: Each automation includes its own requirements.txt, README, and logs/
+- **Memory Bank**: All project documentation in `memory-bank/` directory
+- **Virtual Environments**: Use venv for Python dependency isolation
+
+### Coding Patterns
+
+#### Python Scripts
+- Use Python 3.12+ as the standard
+- Include docstrings for all functions
+- Graceful error handling with try/except blocks
+- Detailed logging to timestamped files
+- Configuration at the top of files (clearly marked)
+
+#### Configuration Management
+- Sensitive data (API keys, emails) in `.env` files
+- Environment variables loaded with `os.environ.get()` with sensible defaults
+- `.env.example` templates for new automations
+- Never commit `.env` files
+
+#### Web Scraping
+- Always use respectful delays (2-3 seconds between requests)
+- User-Agent headers to identify the bot properly
+- Graceful handling of HTML structure changes
+- Limit results per search to avoid overwhelming APIs
+
+#### Notification Systems
+- **Desktop Notifications (macOS)**: Use osascript for native notifications
+- **HTML Reports**: Generate beautiful standalone HTML files for detailed viewing
+- Only notify when new content is found (prevent duplicate notifications)
+- Keep notification messages concise (detailed info in HTML file)
+- Auto-open HTML files in browser for immediate review
+
+### Security Practices
+- ✅ Use environment variables for all secrets
+- ✅ Keep `.env` in `.gitignore`
+- ✅ Provide `.env.example` templates
+- ⚠️ Verify sender emails in SendGrid before use
+
+### State Management
+- JSON files for simple persistence (e.g., `sent_jobs.json`)
+- Keep state files small (auto-prune old entries)
+- No database needed for current scale
+- State files in same directory as script
+
+### Automation Scheduling
+- **macOS**: Use cron for scheduling
+- **Wrapper Scripts**: Shell scripts for cron (handles PATH, logging, etc.)
+- **Log Files**: Always redirect output to timestamped logs
+- **Frequency**: Twice daily (9 AM, 6 PM) for job searches
+
+### File Organization
+```
+automations/
+├── memory-bank/           # Project documentation (6 core files)
+├── .cursorrules          # This file
+├── .gitignore            # Ignore venv/, .env, logs/
+├── LICENSE               # MIT License
+└── [automation-name]/    # Each automation is self-contained
+    ├── README.md         # Automation-specific docs
+    ├── requirements.txt  # Python dependencies
+    ├── .env.example      # Environment variable template
+    ├── main_script.py    # Primary automation logic
+    ├── run_*.sh          # Cron wrapper script
+    ├── state.json        # State tracking (auto-generated)
+    └── logs/             # Execution logs (auto-generated)
+```
+
+### Testing Strategy
+- Manual testing before adding to cron
+- Check logs regularly (weekly minimum)
+- Monitor SendGrid quota usage
+- Validate HTML emails before deploying
+
+### Documentation Standards
+- Every automation needs a README
+- Memory Bank files updated when architecture changes
+- `activeContext.md` updated with current focus
+- `progress.md` tracks what works and what's next
+
+### User Context
+- **Role**: Engineering leadership (Director, VP, Manager)
+- **Skills**: React, TypeScript, Node.js, AI/ML, Team Leadership
+- **Location**: Winter Springs, FL (50-mile radius)
+- **Preferences**: Remote positions, EdTech/Education sector
+- **Email**: bisike.nnadi@gmail.com
+
+### Known Challenges
+1. **Web Scraping Fragility**: Job board HTML changes frequently
+   - Solution: Fallback gracefully, log errors, continue with other sources
+   
+2. **Rate Limiting**: Avoid overwhelming job boards
+   - Solution: Respectful delays, limit results per search
+   
+3. **Email Deliverability**: SendGrid requires verified senders
+   - Solution: Verify sender in SendGrid dashboard before use
+
+4. **Cron Environment**: Limited PATH and env vars
+   - Solution: Shell wrapper scripts with full paths
+
+### Recent Changes (November 28, 2025)
+- **Jobs Automation**: Migrated from SendGrid email to desktop notifications + HTML reports
+  - Removed SendGrid dependency (simpler, free, no API keys needed)
+  - Added macOS native notification support
+  - Generate beautiful HTML reports with auto-open in browser
+  - Benefits: Instant notifications, no inbox clutter, fully local & private
+
+### Future Automation Ideas
+- Google Sheets integration for job tracking
+- Newsletter summarization (daily digest)
+- Calendar optimization (meeting analytics)
+- Financial tracking (expense categorization)
+- Learning resource aggregation (curated content)
+- Social media content scheduling
+
+### Maintenance Reminders
+- Review logs weekly for errors
+- Prune old log files monthly
+- Check SendGrid quota monthly
+- Update Memory Bank when adding new automations
+- Test scrapers after job board UI changes
+
+---
+
+**Last Updated**: November 28, 2025
+**Memory Bank Version**: 1.0
+
