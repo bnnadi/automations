@@ -4,28 +4,31 @@
 
 ### 1. Install Dependencies (One-Time Setup)
 ```bash
-cd /Users/bisikennadi/Research/automation
+cd jobs
 pip3 install -r requirements.txt
 ```
 
 Or use a virtual environment (recommended):
 ```bash
-cd /Users/bisikennadi/Research/automation
+cd jobs
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 ```
 
-### 2. Update SendGrid Email Configuration
-Edit `jobs.py` and update line 26:
-```python
-SENDER_EMAIL = "your_verified_email@example.com"  # Replace with your verified SendGrid email
-```
+### 2. Configure Your Search Preferences
+Edit `jobs.py` to customize:
+- Job titles, location, search radius
+- Required and nice-to-have skills
+- Job type preferences
+- Date range for searches
+
+See the main README.md for detailed configuration options.
 
 ### 3. Test the Script Manually
 ```bash
-cd /Users/bisikennadi/Research/automation
+cd jobs
 ./run_job_search.sh
 ```
 
@@ -44,10 +47,15 @@ crontab -e
 Add these lines to run the script **twice daily** (9 AM and 6 PM):
 ```bash
 # Job Search Automation - Runs at 9:00 AM daily
-0 9 * * * /Users/bisikennadi/Research/automation/run_job_search.sh
+0 9 * * * $HOME/Projects/automations/jobs/run_job_search.sh
 
 # Job Search Automation - Runs at 6:00 PM daily
-0 18 * * * /Users/bisikennadi/Research/automation/run_job_search.sh
+0 18 * * * $HOME/Projects/automations/jobs/run_job_search.sh
+```
+
+**Note**: Replace `$HOME/Projects/automations` with your actual project path. To find it, run:
+```bash
+cd jobs && pwd
 ```
 
 Save and exit (`:wq` in vim, or Ctrl+X in nano).
@@ -56,19 +64,21 @@ Save and exit (`:wq` in vim, or Ctrl+X in nano).
 
 ### Run every 6 hours:
 ```bash
-0 */6 * * * /Users/bisikennadi/Research/automation/run_job_search.sh
+0 */6 * * * $HOME/Projects/automations/jobs/run_job_search.sh
 ```
 
 ### Run Monday-Friday at 9 AM and 6 PM (weekdays only):
 ```bash
-0 9 * * 1-5 /Users/bisikennadi/Research/automation/run_job_search.sh
-0 18 * * 1-5 /Users/bisikennadi/Research/automation/run_job_search.sh
+0 9 * * 1-5 $HOME/Projects/automations/jobs/run_job_search.sh
+0 18 * * 1-5 $HOME/Projects/automations/jobs/run_job_search.sh
 ```
 
 ### Run every 3 hours during work hours (9 AM - 6 PM):
 ```bash
-0 9-18/3 * * * /Users/bisikennadi/Research/automation/run_job_search.sh
+0 9-18/3 * * * $HOME/Projects/automations/jobs/run_job_search.sh
 ```
+
+**Note**: Replace `$HOME/Projects/automations` with your actual project path.
 
 ## Cronjob Time Format Reference
 ```
@@ -90,11 +100,11 @@ crontab -l
 
 ### Check the logs:
 ```bash
-# View latest log
-ls -lt /Users/bisikennadi/Research/automation/logs/ | head -5
+# View latest log (from jobs directory)
+ls -lt logs/ | head -5
 
 # View last run
-tail -50 /Users/bisikennadi/Research/automation/logs/job_search_*.log
+tail -50 logs/job_search_*.log
 ```
 
 ### Check system cron logs (macOS):
@@ -116,7 +126,8 @@ log show --predicate 'process == "cron"' --last 1h
 
 3. **Test the script manually:**
    ```bash
-   /Users/bisikennadi/Research/automation/run_job_search.sh
+   cd jobs
+   ./run_job_search.sh
    ```
 
 ### No emails being sent?
@@ -124,13 +135,14 @@ log show --predicate 'process == "cron"' --last 1h
 2. Verify sender email is verified in SendGrid dashboard
 3. Check the logs for error messages:
    ```bash
-   grep -i error /Users/bisikennadi/Research/automation/logs/*.log
+   grep -i error logs/*.log
    ```
 
 ### Permission denied errors?
 ```bash
-chmod +x /Users/bisikennadi/Research/automation/run_job_search.sh
-chmod +x /Users/bisikennadi/Research/automation/jobs.py
+cd jobs
+chmod +x run_job_search.sh
+chmod +x jobs.py
 ```
 
 ## Log Management
@@ -139,12 +151,12 @@ Logs are automatically cleaned up - only the last 30 runs are kept.
 
 View all logs:
 ```bash
-ls -lh /Users/bisikennadi/Research/automation/logs/
+ls -lh logs/
 ```
 
 Delete old logs manually:
 ```bash
-rm /Users/bisikennadi/Research/automation/logs/job_search_*.log
+rm logs/job_search_*.log
 ```
 
 ## Disable/Remove Cronjob
