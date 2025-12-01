@@ -84,3 +84,4 @@ Cron → run_job_search.sh → jobs.py
 - Log all errors to timestamped log files
 - Email only sent if ≥1 job found successfully
 
+

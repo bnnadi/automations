@@ -44,3 +44,4 @@ A centralized repository for personal automation scripts powered by AI and intel
 - Environment: macOS with Python 3.12
 - Privacy: API keys in code (should migrate to env vars)
 
+

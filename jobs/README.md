@@ -17,7 +17,7 @@ Automated job search script that searches LinkedIn and Indeed for engineering le
 
 ### 1. Install Dependencies
 ```bash
-cd /Users/bisikennadi/Projects/automations/jobs
+cd jobs
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -38,14 +38,20 @@ When jobs are found, you'll see:
 crontab -e
 ```
 
-Add these lines (adjust path if needed):
+Add these lines (replace `$HOME/Projects/automations` with your actual project path):
 ```bash
 # 9:00 AM daily
-0 9 * * * /Users/bisikennadi/Projects/automations/jobs/run_job_search.sh
+0 9 * * * $HOME/Projects/automations/jobs/run_job_search.sh
 
 # 6:00 PM daily
-0 18 * * * /Users/bisikennadi/Projects/automations/jobs/run_job_search.sh
+0 18 * * * $HOME/Projects/automations/jobs/run_job_search.sh
 ```
+
+**Note**: You can also use an absolute path. To find your project path, run:
+```bash
+cd jobs && pwd
+```
+Then replace `$HOME/Projects/automations` in the cronjob with the output.
 
 ## Files
 
